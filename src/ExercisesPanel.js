@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
+const BACKEND_URL = "https://your-backend.onrender.com"; // 👈 replace with Render backend URL
+
 export default function ExercisesPanel({ unitId }) {
   const [exercises, setExercises] = useState([]);
 
   useEffect(() => {
-    fetch(`https://language-learning-backend-419f.onrender.com/exercises/${unitId}`)
+    fetch(`${BACKEND_URL}/exercises/${unitId}`)
       .then(res => res.json())
       .then(data => setExercises(data));
   }, [unitId]);
@@ -33,40 +35,20 @@ export default function ExercisesPanel({ unitId }) {
         return (
           <div key={ex.id}>
             <p>{ex.instruction}</p>
-            {ex.examples.map((exText, idx) => (
-              <input key={idx} placeholder={exText} />
-            ))}
-          </div>
-        );
-      case 'matching':
-        return (
-          <div key={ex.id}>
-            <p>{ex.instruction}</p>
-            <ul>
-              {ex.items.map((item, idx) => (
-                <li key={idx}>{item}</li>
-              ))}
-            </ul>
-          </div>
-        );
-      case 'dialogue':
-        return (
-          <div key={ex.id}>
-            <p>{ex.instruction}</p>
-            {ex.example.map((line, idx) => (
-              <p key={idx}><strong>{line.speaker}:</strong> {line.text}</p>
+            {ex.examples.map((txt, idx) => (
+              <input key={idx} placeholder={txt} />
             ))}
           </div>
         );
       default:
-        return null;
+        return <p key={ex.id}>{ex.instruction} (type: {ex.type})</p>;
     }
   };
 
   return (
     <div>
-      <h2>Exercises for Unit {unitId}</h2>
-      {exercises.map(renderExercise)}
+      <h3>Exercises for Unit {unitId}</h3>
+      {exercises.length === 0 ? <p>No exercises yet.</p> : exercises.map(renderExercise)}
     </div>
   );
 }
