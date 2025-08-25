@@ -4,7 +4,7 @@ export default function ExercisesPanel({ unitId }) {
   const [exercises, setExercises] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/exercises/${unitId}`)
+    fetch(`https://language-learning-backend-419f.onrender.com/exercises/${unitId}`)
       .then(res => res.json())
       .then(data => setExercises(data));
   }, [unitId]);
