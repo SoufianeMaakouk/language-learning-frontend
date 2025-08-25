@@ -5,7 +5,7 @@ export default function Exercises({ unitId }) {
   const [exercises, setExercises] = useState([]);
 
   useEffect(() => {
-    fetch(`https://your-backend.onrender.com/exercises/${unitId}`)
+    fetch(`https://language-learning-backend-419f.onrender.com/exercises/${unitId}`)
       .then((res) => res.json())
       .then((data) => setExercises(data));
   }, [unitId]);
