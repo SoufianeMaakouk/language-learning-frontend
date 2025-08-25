@@ -7,7 +7,7 @@ function App() {
   const [selectedUnit, setSelectedUnit] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:5000/units')
+    fetch('https://language-learning-backend-419f.onrender.com/units')
       .then(res => res.json())
       .then(data => setUnits(data));
   }, []);
