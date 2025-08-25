@@ -1,31 +1,29 @@
-import React, { useState } from 'react';
-import ExercisesPanel from './ExercisesPanel';
+import React from 'react';
+import Exercises from './Exercises';
 
-const units = [
-  { id: 1, title: "Unit 1" },
-  { id: 2, title: "Unit 2" },
-  { id: 3, title: "Unit 3" },
-  { id: 4, title: "Unit 4" },
-  { id: 5, title: "Unit 5" },
-  { id: 6, title: "Unit 6" },
-  { id: 7, title: "Unit 7" }
-];
+const units = [1,2,3,4,5,6,7];
 
-export default function ExercisesSection() {
-  const [selectedUnit, setSelectedUnit] = useState(null);
-
+export default function ExercisesSection({ selectedUnit, onSelectUnit }) {
   return (
     <div className="section">
       <h2>📝 Exercises</h2>
-      <ul>
-        {units.map(unit => (
-          <li key={unit.id}>
-            <button onClick={() => setSelectedUnit(unit)}>{unit.title}</button>
-          </li>
+      <div>
+        {units.map((unit) => (
+          <button
+            key={unit}
+            onClick={() => onSelectUnit(unit)}
+            style={{
+              margin: "5px",
+              backgroundColor: selectedUnit === unit ? "#4caf50" : "#eee",
+            }}
+          >
+            Unit {unit}
+          </button>
         ))}
-      </ul>
+      </div>
 
-      {selectedUnit && <ExercisesPanel unitId={selectedUnit.id} />}
+      {/* Render Exercises for selected unit */}
+      <Exercises unitId={selectedUnit} />
     </div>
   );
 }
