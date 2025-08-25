@@ -1,28 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import UnitsList from './UnitsList';
-import ExercisesPanel from './ExercisesPanel';
+import React from 'react';
+import CoursesSection from './CoursesSection';
+import ExercisesSection from './ExercisesSection';
+import './app.css';
 
 function App() {
-  const [units, setUnits] = useState([]);
-  const [selectedUnit, setSelectedUnit] = useState(null);
-
-  useEffect(() => {
-    fetch('https://language-learning-backend-419f.onrender.com/units')
-      .then(res => res.json())
-      .then(data => setUnits(data));
-  }, []);
-
   return (
-    <div style={{ display: 'flex', padding: '20px' }}>
-      <div style={{ width: '30%', marginRight: '20px' }}>
-        <UnitsList units={units} onSelectUnit={setSelectedUnit} />
-      </div>
-      <div style={{ width: '70%' }}>
-        {selectedUnit ? (
-          <ExercisesPanel unitId={selectedUnit.id} />
-        ) : (
-          <p>Wählen Sie eine Einheit, um zu beginnen.</p>
-        )}
+    <div className="container">
+      <h1>Language Learning App</h1>
+      <div className="sections">
+        <CoursesSection />
+        <ExercisesSection />
       </div>
     </div>
   );
