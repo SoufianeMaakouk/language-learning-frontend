@@ -1,20 +1,27 @@
-import React from 'react';
-import Exercises from './Exercises';
+import React from "react";
+import ExercisesPanel from "./ExercisesPanel";
 
-const units = [1,2,3,4,5,6,7];
+const units = [1, 2, 3, 4, 5, 6, 7];
 
 export default function ExercisesSection({ selectedUnit, onSelectUnit }) {
   return (
-    <div className="section">
-      <h2>📝 Exercises</h2>
-      <div>
+    <div className="section" style={{ padding: 16 }}>
+      <h2 style={{ color: "#1e3a8a" }}>📝 Exercises</h2>
+
+      <div style={{ marginBottom: 16 }}>
         {units.map((unit) => (
           <button
             key={unit}
             onClick={() => onSelectUnit(unit)}
             style={{
-              margin: "5px",
-              backgroundColor: selectedUnit === unit ? "#4caf50" : "#eee",
+              margin: "4px",
+              padding: "8px 16px",
+              borderRadius: 8,
+              border: "none",
+              color: "#fff",
+              backgroundColor: selectedUnit === unit ? "#4caf50" : "#007bff",
+              cursor: "pointer",
+              transition: "0.2s",
             }}
           >
             Unit {unit}
@@ -22,8 +29,7 @@ export default function ExercisesSection({ selectedUnit, onSelectUnit }) {
         ))}
       </div>
 
-      {/* Render Exercises for selected unit */}
-      <Exercises unitId={selectedUnit} />
+      <ExercisesPanel unitId={selectedUnit} />
     </div>
   );
 }
