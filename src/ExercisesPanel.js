@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const BACKEND_URL = "https://your-backend.onrender.com"; // 👈 replace with Render backend URL
+const BACKEND_URL = "https://language-learning-backend-419f.onrender.com"; // 👈 replace with Render backend URL
 
 export default function ExercisesPanel({ unitId }) {
   const [exercises, setExercises] = useState([]);
