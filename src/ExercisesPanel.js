@@ -6,57 +6,44 @@ export default function ExercisesPanel({ unitId }) {
 
   useEffect(() => {
     if (!unitId) return;
-
-    fetchExercises(unitId)
-      .then(data => {
-        // Ensure we always get an array
-        if (Array.isArray(data)) setExercises(data);
-        else if (data.exercises && Array.isArray(data.exercises)) setExercises(data.exercises);
-        else setExercises([]);
-      })
-      .catch(err => {
-        console.error('Failed to fetch exercises:', err);
-        setExercises([]);
-      });
+    fetchExercises(unitId).then(data => setExercises(data));
   }, [unitId]);
 
-  const renderExercise = ex => {
+  const renderExercise = (ex) => {
     switch (ex.type) {
       case 'multiple_choice':
         return (
-          <div key={ex.id} className="exercise-card">
+          <div key={ex.id} className="exercise">
             <p>{ex.instruction}</p>
             {ex.options.map((opt, idx) => (
-              <button
-                key={idx}
-                onClick={() => alert(opt === ex.answer ? '✅ Correct!' : '❌ Wrong!')}
-              >
-                {opt}
-              </button>
+              <button key={idx}>{opt}</button>
             ))}
           </div>
         );
       case 'fill_in_the_blank':
         return (
-          <div key={ex.id} className="exercise-card">
+          <div key={ex.id} className="exercise">
             <p>{ex.instruction}</p>
-            {ex.examples.map((txt, idx) => (
-              <input
-                key={idx}
-                placeholder={txt}
-                onBlur={e =>
-                  alert(e.target.value === ex.answer[idx] ? '✅ Correct!' : `❌ Wrong! Correct: ${ex.answer[idx]}`)
-                }
-              />
+            {ex.examples?.map((txt, idx) => (
+              <input key={idx} placeholder={txt} />
             ))}
           </div>
         );
       default:
-        return <p key={ex.id}>{ex.instruction} (type: {ex.type})</p>;
+        return (
+          <div key={ex.id} className="exercise">
+            <p>{ex.instruction} (type: {ex.type})</p>
+          </div>
+        );
     }
   };
 
-  if (!exercises || exercises.length === 0) return <p>No exercises yet.</p>;
+  if (!unitId) return <p>Select a unit to see exercises.</p>;
 
-  return <div>{exercises.map(renderExercise)}</div>;
+  return (
+    <div className="exercises-panel">
+      <h3>Exercises for Unit {unitId}</h3>
+      {exercises.length === 0 ? <p>No exercises yet.</p> : exercises.map(renderExercise)}
+    </div>
+  );
 }
