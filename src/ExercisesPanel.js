@@ -1,31 +1,38 @@
 import React, { useEffect, useState } from 'react';
-
-const BACKEND_URL = "https://language-learning-backend-419f.onrender.com";
+import { fetchExercises } from './api';
 
 export default function ExercisesPanel({ unitId }) {
   const [exercises, setExercises] = useState([]);
 
   useEffect(() => {
-    fetch(`${BACKEND_URL}/exercises/${unitId}`)
-      .then(res => res.json())
+    if (!unitId) return;
+
+    fetchExercises(unitId)
       .then(data => {
-        // Ensure it's always an array
-        setExercises(Array.isArray(data) ? data : data.exercises || []);
+        // Ensure we always get an array
+        if (Array.isArray(data)) setExercises(data);
+        else if (data.exercises && Array.isArray(data.exercises)) setExercises(data.exercises);
+        else setExercises([]);
       })
       .catch(err => {
-        console.error(err);
+        console.error('Failed to fetch exercises:', err);
         setExercises([]);
       });
   }, [unitId]);
 
-  const renderExercise = (ex) => {
+  const renderExercise = ex => {
     switch (ex.type) {
       case 'multiple_choice':
         return (
           <div key={ex.id} className="exercise-card">
             <p>{ex.instruction}</p>
             {ex.options.map((opt, idx) => (
-              <button key={idx}>{opt}</button>
+              <button
+                key={idx}
+                onClick={() => alert(opt === ex.answer ? '✅ Correct!' : '❌ Wrong!')}
+              >
+                {opt}
+              </button>
             ))}
           </div>
         );
@@ -34,7 +41,13 @@ export default function ExercisesPanel({ unitId }) {
           <div key={ex.id} className="exercise-card">
             <p>{ex.instruction}</p>
             {ex.examples.map((txt, idx) => (
-              <input key={idx} placeholder={txt} />
+              <input
+                key={idx}
+                placeholder={txt}
+                onBlur={e =>
+                  alert(e.target.value === ex.answer[idx] ? '✅ Correct!' : `❌ Wrong! Correct: ${ex.answer[idx]}`)
+                }
+              />
             ))}
           </div>
         );
@@ -43,16 +56,7 @@ export default function ExercisesPanel({ unitId }) {
     }
   };
 
-  const exercisesArray = Array.isArray(exercises) ? exercises : [];
+  if (!exercises || exercises.length === 0) return <p>No exercises yet.</p>;
 
-  return (
-    <div>
-      <h3>Exercises for Unit {unitId}</h3>
-      {exercisesArray.length === 0 ? (
-        <p>No exercises yet.</p>
-      ) : (
-        exercisesArray.map(renderExercise)
-      )}
-    </div>
-  );
+  return <div>{exercises.map(renderExercise)}</div>;
 }
